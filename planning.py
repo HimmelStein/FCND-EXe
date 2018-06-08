@@ -1,6 +1,8 @@
 from queue import PriorityQueue
 import numpy as np
 from enum import Enum
+from configuration_space import create_grid
+import matplotlib.pyplot as plt
 
 
 class Action(Enum):
@@ -83,7 +85,6 @@ def heuristic(position, goal_position):
 
 
 def a_star(grid, h, start, goal):
-    path = []
     queue = PriorityQueue()
     queue.put((0, start, 0))
     visited = set(start)
@@ -123,14 +124,39 @@ def a_star(grid, h, start, goal):
         n = goal
         path_cost = branch[n][0]
         while branch[n][1] != start:
-            path.append(branch[n][2])
+            # path.append(branch[n][2])
+            path.append(branch[n][1])
             n = branch[n][1]
-        path.append(branch[n][2])
+        # path.append(branch[n][2])
+        path.append(branch[n][1])
 
-    return path[::-1], path_cost
+    # return path[::-1], path_cost
+    return path, path_cost
 
 
 if __name__ == "__main__":
+    filename = 'data/colliders.csv'
+    data = np.loadtxt(filename, delimiter=',', dtype='Float64', skiprows=2)
+    grid = create_grid(data, 7, 6)
+    start, goal = (315, 444), (8, 500)
+    path, cost = a_star(grid, heuristic, start, goal)
+    print(path, cost)
+
+    fig = plt.figure()
+
+    plt.imshow(grid, cmap='Greys', origin='lower')
+    # draw points
+    all_pts = np.array(path)
+    north_vals = all_pts[:, 0]
+    east_vals = all_pts[:, 1]
+    plt.scatter(east_vals, north_vals, c='red')
+
+    plt.ylabel('NORTH')
+    plt.xlabel('EAST')
+
+    plt.show()
+
+    """
     start = (0, 0)
     goal = (4, 4)
 
@@ -146,4 +172,4 @@ if __name__ == "__main__":
     print(path, cost)
 
     print(visualize_path(grid, path, start))
-
+    """

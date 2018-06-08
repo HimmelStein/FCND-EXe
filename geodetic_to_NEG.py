@@ -45,9 +45,12 @@ if __name__ == "__main__":
     geodetic_current_coordinates = [-122.079465, 37.393037,  30]
     geodetic_home_coordinates = [-122.108432, 37.400154,  0]
 
+    geodetic_current_coordinates = [-122.397435, 37.790358, 7]
+    geodetic_home_coordinates = [-122.397450, 37.792480, 0]
+
     local_coordinates_NED = global_to_local(geodetic_current_coordinates, geodetic_home_coordinates)
 
-    print(local_coordinates_NED)
+    print('on roof:', local_coordinates_NED)
     # Should print [ -764.96  2571.59   -30.  ]
 
     numpy.set_printoptions(precision=6)
